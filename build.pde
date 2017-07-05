@@ -1,88 +1,85 @@
-// mousePress adds elements to the arrayLists
+// when the program is quit it gives up soem "fatal error in Java Runtime" stuff
+// problem doesnt seem to impede the function of the program and doesnt exist at all 
+// 				if the insantiating lines for the filter are commented out
+
+
+
+// maybe make an object that can hold all these (rect, whiteNoise, filter) together.
+
+
+// probably end up trying to port this to a Beads version
+
+
+// mousePress adds an element to the arrayList
 // keyPress of 'k' can kill off a set of rect/noise/filter chosen at random
 
 
-//imports sound library
+
 import processing.sound.*;
 
-// setup an expandable array for each of items to be associated with each other
-//		an array for ther drawing rectangles
-//		one for the noise genrators
-//		one for the filters
-
-ArrayList<PVector> positions = new ArrayList<PVector>();
-ArrayList<WhiteNoise> whiteNoises = new ArrayList<WhiteNoise>();
-ArrayList<BandPass> bandPasses = new ArrayList<BandPass>();
-
+CustomRect rectangle;
 
 void setup() {
 	rectMode(CENTER);
-	// size(600, 400, P2D);
-	fullScreen();
-}
+	// fullScreen();
+	size(400, 400, P2D);
+	rectangle = new CustomRect(random(width), random(height));
 
-// draws through the arrayList of drawing rectangles
-//		does list backwards to allow for items to be removed so as not to confuse the loop counter
-// prints instructions to screen
+	// pos = new PVector(random(width), random(height));
+
+	// whiteNoise = new WhiteNoise(this);
+	// whiteNoise.pan(map(pos.x, 0, width, -1, 1));
+	// whiteNoise.play();
+
+	// lowPass = new LowPass(this);
+	// lowPass.process(whiteNoise, 400);
+	
+}
 
 void draw() {
 
 	background(100);
-
-	for (int i = positions.size() - 1; i >= 0; i --) {
-		PVector pos = positions.get(i);
-		rect(pos.x, pos.y, 100, 50);
-	}
-
-	text("Click mouse to create new rectangle, 'k' will kill a random rectangle", 20, height - 20);
+	rectangle.display();
+	// for (int i = positions.size() - 1; i >= 0; i --) {
+	// 	PVector pos = positions.get(i);
+	// 	rect(pos.x, pos.y, 100, 50);
+	// }
 
 }
 
+// void mousePressed() {
+// 	positions.add(new PVector(mouseX, mouseY));
+// 	bandPasses.add(new BandPass(this));
 
-// creates new entry in each of the drawing rectangle, noise and filter arrayLists
-//		creates new drawing rectangle and uses index to retrieve correct noise generators and filters for assignments
-//		assigns resonant frequency of filter as an inverse function the height (height: distance from top of screen)
-//		assign pan position of noise generator as a function of position of rectangle across the width of the screen
+	
+// 	// whiteNoises[lastIn].pan(panControl);
+// 	// whiteNoises[lastIn].play();
 
-void mousePressed() {
-	positions.add(new PVector(mouseX, mouseY));
-	int lastIn = positions.size() - 1; 
+// 	// bandPasses[lastIn].process(whiteNoises[lastIn], freqControl);
+// 	// println("mousePressed", lastIn, freqControl);
 
-	float panControl = map(mouseX, 0, width, -1, 1);
+// 	// pos.x = mouseX;
+// 	// pos.y = mouseY;
+// 	// whiteNoise.pan(map(pos.x, 0, width, -1, 1));
 
-	whiteNoises.add(new WhiteNoise(this));
-	WhiteNoise wN = whiteNoises.get(lastIn);
-	wN.pan(panControl);
-	wN.play();
+// }
 
-	float freqControl = map(mouseY, height, 0, 200, 10000);
+// void keyPressed() {
+// 	if (key == 'k' && positions.size() > 0) {
 
-	bandPasses.add(new BandPass(this));
-	BandPass bP = bandPasses.get(lastIn);
-	bP.process(wN, freqControl);
-}
+// 		int victim = int(random(positions.size()));
 
+// 		positions.remove(victim);
 
-void keyPressed() {
+// 		BandPass bP = bandPasses.get(victim);
+// 		bP.stop();
+// 		bandPasses.remove(victim);
 
-// kills a random box when 'k' is pressed
-//		selects random index in range of size of the drawing rectangle arrayList
-//		removes corresponding entry from each of the rectangle, noise and filter arrayLists 
-	if (key == 'k' && positions.size() > 0) {
-
-		int victim = int(random(positions.size()));
-
-		positions.remove(victim);
-
-		BandPass bP = bandPasses.get(victim);
-		bP.stop();
-		bandPasses.remove(victim);
-
-		WhiteNoise wN = whiteNoises.get(victim);
-		wN.stop();
-		whiteNoises.remove(victim);
-	}
-}
+// 		WhiteNoise wN = whiteNoises.get(victim);
+// 		wN.stop();
+// 		whiteNoises.remove(victim);
+// 	}
+// }
 
 
 
